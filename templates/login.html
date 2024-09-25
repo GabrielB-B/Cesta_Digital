@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form action="{{ url_for('login') }}" method="POST">
+        <label for="nome">Nome de usuário:</label>
+        <input type="text" name="nome" required>
+        <br>
+        <label for="senha">Senha:</label>
+        <input type="password" name="senha" required>
+        <br>
+        <button type="submit">Entrar</button>
+    </form>
+    <p>Não tem uma conta? <a href="{{ url_for('register') }}">Cadastre-se</a></p>
+</body>
+</html>

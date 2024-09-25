@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Adicionar Família</title>
+</head>
+<body>
+    <h1>Adicionar Nova Família</h1>
+    <form action="{{ url_for('adicionar_familia') }}" method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" name="nome" required>
+        <br>
+        <label for="endereco">Endereço:</label>
+        <input type="text" name="endereco" required>
+        <br>
+        <label for="cidade">Cidade:</label>
+        <input type="text" name="cidade" required>
+        <br>
+        <label for="estado">Estado:</label>
+        <input type="text" name="estado" maxlength="2" required>
+        <br>
+        <label for="cep">CEP:</label>
+        <input type="text" name="cep" required>
+        <br>
+        <label for="telefone">Telefone:</label>
+        <input type="text" name="telefone" required>
+        <br>
+        <label for="referencia">Referência:</label>
+        <input type="text" name="referencia">
+        <br>
+        <label for="internet">Tem acesso à internet?</label>
+        <input type="checkbox" name="internet">
+        <br>
+        <label for="qtd_celulares">Quantidade de Celulares:</label>
+        <input type="number" name="qtd_celulares" required>
+        <br>
+        <label for="auxilio_governo">Recebe Auxílio do Governo?</label>
+        <input type="checkbox" name="auxilio_governo">
+        <br>
+        <label for="estado_civil">Estado Civil:</label>
+        <input type="text" name="estado_civil" required>
+        <br>
+        <label for="renda_familiar">Renda Familiar:</label>
+        <input type="number" name="renda_familiar" required>
+        <br>
+        <button type="submit">Adicionar</button>
+    </form>
+    <a href="{{ url_for('index') }}">Voltar</a>
+</body>
+</html>

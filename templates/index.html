@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Sistema de Cadastro de Famílias</title> 
+</head>
+
+<body>
+    <h1>Famílias Registradas</h1>
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Endereço</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>CEP</th>
+            <th>Telefone</th>
+            <th>Renda Familiar</th>
+            <th>Situação de Pobreza</th>
+        </tr>
+        {% for familia in familias %}
+        <tr>
+            <td>{{ familia.nome }}</td>
+            <td>{{ familia.endereco }}</td>
+            <td>{{ familia.cidade }}</td>
+            <td>{{ familia.estado }}</td>
+            <td>{{ familia.cep }}</td>
+            <td>{{ familia.telefone }}</td>
+            <td>{{ familia.renda_familiar }}</td>
+            <td>
+                {% if familia.is_pobreza() %}
+                    <span style="color:red;">Pobreza</span>
+                {% else %}
+                    <span style="color:green;">Acima da Linha de Pobreza</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('adicionar_familia') }}">Adicionar Família</a>
+    <a href="{{ url_for('logout') }}">Sair</a>
+</body>
+</html>

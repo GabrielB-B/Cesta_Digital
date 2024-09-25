@@ -1,0 +1,28 @@
+<!-- templates/listar_familias.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Listar Famílias</title>
+</head>
+<body>
+    <header>
+        <h1>Listar Famílias</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Início</a>
+            <a href="{{ url_for('adicionar_familia') }}">Adicionar Família</a>
+            <a href="{{ url_for('logout') }}">Sair</a>
+        </nav>
+    </header>
+    <div class="container">
+        <h2>Famílias Registradas</h2>
+        <ul>
+            {% for familia in familias %}
+                <li>{{ familia.nome }} - Renda: R$ {{ familia.renda_familiar }} - Situação: {% if familia.is_pobreza() %} Pobreza {% else %} Não Pobreza {% endif %}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
