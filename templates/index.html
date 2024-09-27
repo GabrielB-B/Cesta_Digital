@@ -1,45 +1,62 @@
+<!-- templates/index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <title>Sistema de Cadastro de Famílias</title> 
+    <title>Sistema de Cadastro de Famílias</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-
 <body>
-    <h1>Famílias Registradas</h1>
-    <table>
-        <tr>
-            <th>Nome</th>
-            <th>Endereço</th>
-            <th>Cidade</th>
-            <th>Estado</th>
-            <th>CEP</th>
-            <th>Telefone</th>
-            <th>Renda Familiar</th>
-            <th>Situação de Pobreza</th>
-        </tr>
-        {% for familia in familias %}
-        <tr>
-            <td>{{ familia.nome }}</td>
-            <td>{{ familia.endereco }}</td>
-            <td>{{ familia.cidade }}</td>
-            <td>{{ familia.estado }}</td>
-            <td>{{ familia.cep }}</td>
-            <td>{{ familia.telefone }}</td>
-            <td>{{ familia.renda_familiar }}</td>
-            <td>
-                {% if familia.is_pobreza() %}
-                    <span style="color:red;">Pobreza</span>
-                {% else %}
-                    <span style="color:green;">Acima da Linha de Pobreza</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <a href="{{ url_for('adicionar_familia') }}">Adicionar Família</a>
-    <a href="{{ url_for('logout') }}">Sair</a>
+    <header>
+        <h1>Famílias Registradas</h1>
+        <nav>
+            <a href="{{ url_for('adicionar_familia') }}">Adicionar Família</a>
+            <a href="{{ url_for('logout') }}">Sair</a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Nome</th>
+                    <th>Endereço</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>CEP</th>
+                    <th>Telefone</th>
+                    <th>Renda Familiar</th>
+                    <th>Situação de Pobreza</th>
+                    <th>Ações</th>
+                </tr>
+                {% for familia in familias %}
+                <tr>
+                    <td>{{ familia.nome }}</td>
+                    <td>{{ familia.endereco }}</td>
+                    <td>{{ familia.cidade }}</td>
+                    <td>{{ familia.estado }}</td>
+                    <td>{{ familia.cep }}</td>
+                    <td>{{ familia.telefone }}</td>
+                    <td>R$ {{ '%.2f' % familia.renda_familiar }}</td>
+                    <td>
+                        {% if familia.is_pobreza() %}
+                            <span class="status-pobreza">Pobreza</span>
+                        {% else %}
+                            <span class="status-nao-pobreza">Acima da Linha de Pobreza</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="{{ url_for('editar_familia', familia_id=familia.id) }}" class="edit-button">Editar</a>
+                            <form action="{{ url_for('excluir_familia', familia_id=familia.id) }}" method="POST">
+                                <button type="submit" class="delete" onclick="return confirm('Tem certeza que deseja excluir esta família?')">Excluir</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,0 +1,51 @@
+<!-- templates/editar_membro.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Membro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Editar Membro</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Início</a>
+            <a href="{{ url_for('logout') }}">Sair</a>
+        </nav>
+    </header>
+    <div class="container">
+        <form method="POST" action="{{ url_for('editar_membro', membro_id=membro.id) }}">
+            <div class="form-group">
+                <label for="nome_membro">Nome do Membro:</label>
+                <input type="text" name="nome_membro" id="nome_membro" value="{{ membro.nome }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="parentesco">Parentesco:</label>
+                <select name="parentesco" id="parentesco" required>
+                    <option value="Pai" {% if membro.parentesco == 'Pai' %}selected{% endif %}>Pai</option>
+                    <option value="Mãe" {% if membro.parentesco == 'Mãe' %}selected{% endif %}>Mãe</option>
+                    <option value="Filho" {% if membro.parentesco == 'Filho' %}selected{% endif %}>Filho</option>
+                    <option value="Filha" {% if membro.parentesco == 'Filha' %}selected{% endif %}>Filha</option>
+                    <option value="Outro" {% if membro.parentesco == 'Outro' %}selected{% endif %}>Outro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="renda">Renda:</label>
+                <input type="number" step="0.01" name="renda" id="renda" value="{{ membro.renda }}" required>
+            </div>
+
+            <div class="button-group">
+                <button type="submit">Atualizar Membro</button>
+                <button type="reset" class="reset">Limpar</button>
+            </div>
+        </form>
+        <div class="button-group">
+            <a href="{{ url_for('editar_familia', familia_id=membro.familia_id) }}" class="button">Voltar</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,50 +1,136 @@
+<!-- templates/adicionar.html -->
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Família</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Adicionar Nova Família</h1>
-    <form action="{{ url_for('adicionar_familia') }}" method="POST">
-        <label for="nome">Nome:</label>
-        <input type="text" name="nome" required>
-        <br>
-        <label for="endereco">Endereço:</label>
-        <input type="text" name="endereco" required>
-        <br>
-        <label for="cidade">Cidade:</label>
-        <input type="text" name="cidade" required>
-        <br>
-        <label for="estado">Estado:</label>
-        <input type="text" name="estado" maxlength="2" required>
-        <br>
-        <label for="cep">CEP:</label>
-        <input type="text" name="cep" required>
-        <br>
-        <label for="telefone">Telefone:</label>
-        <input type="text" name="telefone" required>
-        <br>
-        <label for="referencia">Referência:</label>
-        <input type="text" name="referencia">
-        <br>
-        <label for="internet">Tem acesso à internet?</label>
-        <input type="checkbox" name="internet">
-        <br>
-        <label for="qtd_celulares">Quantidade de Celulares:</label>
-        <input type="number" name="qtd_celulares" required>
-        <br>
-        <label for="auxilio_governo">Recebe Auxílio do Governo?</label>
-        <input type="checkbox" name="auxilio_governo">
-        <br>
-        <label for="estado_civil">Estado Civil:</label>
-        <input type="text" name="estado_civil" required>
-        <br>
-        <label for="renda_familiar">Renda Familiar:</label>
-        <input type="number" name="renda_familiar" required>
-        <br>
-        <button type="submit">Adicionar</button>
-    </form>
-    <a href="{{ url_for('index') }}">Voltar</a>
+    <header>
+        <h1>Adicionar Família</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Início</a>
+            <a href="{{ url_for('logout') }}">Sair</a>
+        </nav>
+    </header>
+    <div class="container">
+        <form method="POST" action="{{ url_for('adicionar_familia') }}">
+            <div class="form-group">
+                <label for="nome">Nome da Família:</label>
+                <input type="text" name="nome" id="nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" name="endereco" id="endereco" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cidade">Cidade:</label>
+                <input type="text" name="cidade" id="cidade" required>
+            </div>
+
+            <div class="form-group">
+                <label for="estado">Estado:</label>
+                <input type="text" name="estado" id="estado" maxlength="2" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input type="text" name="cep" id="cep" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="text" name="telefone" id="telefone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="referencia">Referência:</label>
+                <input type="text" name="referencia" id="referencia">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="internet" id="internet">
+                <label for="internet">Possui Internet</label>
+            </div>
+
+            <div class="form-group">
+                <label for="qtd_celulares">Quantidade de Celulares:</label>
+                <input type="number" name="qtd_celulares" id="qtd_celulares" min="0" value="0">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="auxilio_governo" id="auxilio_governo">
+                <label for="auxilio_governo">Recebe Auxílio do Governo</label>
+            </div>
+
+            <div class="form-group">
+                <label for="estado_civil">Estado Civil:</label>
+                <input type="text" name="estado_civil" id="estado_civil" required>
+            </div>
+
+            <h3>Membros da Família</h3>
+            <div id="membros">
+                <div class="form-group">
+                    <label for="nome_membro">Nome do Membro:</label>
+                    <input type="text" name="nome_membro" required>
+                </div>
+                <div class="form-group">
+                    <label for="parentesco">Parentesco:</label>
+                    <select name="parentesco" required>
+                        <option value="Pai">Pai</option>
+                        <option value="Mãe">Mãe</option>
+                        <option value="Filho">Filho</option>
+                        <option value="Filha">Filha</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="renda">Renda:</label>
+                    <input type="number" step="0.01" name="renda" required>
+                </div>
+            </div>
+            <button type="button" onclick="addMembro()">Adicionar Membro</button>
+            <div class="button-group">
+                <button type="submit">Adicionar Família</button>
+                <button type="reset" class="reset">Limpar</button>
+            </div>
+        </form>
+
+        <script>
+            function addMembro() {
+                const membrosDiv = document.getElementById('membros');
+                
+                const novoMembro = document.createElement('div');
+                novoMembro.classList.add('form-group');
+
+                novoMembro.innerHTML = `
+                    <div class="form-group">
+                        <label for="nome_membro">Nome do Membro:</label>
+                        <input type="text" name="nome_membro" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="parentesco">Parentesco:</label>
+                        <select name="parentesco" required>
+                            <option value="Pai">Pai</option>
+                            <option value="Mãe">Mãe</option>
+                            <option value="Filho">Filho</option>
+                            <option value="Filha">Filha</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="renda">Renda:</label>
+                        <input type="number" step="0.01" name="renda" required>
+                    </div>
+                `;
+
+                membrosDiv.appendChild(novoMembro);
+            }
+        </script>
+    </div>
 </body>
 </html>

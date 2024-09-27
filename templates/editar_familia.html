@@ -1,0 +1,161 @@
+<!-- templates/editar_familia.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Família</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Editar Família</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Início</a>
+            <a href="{{ url_for('logout') }}">Sair</a>
+        </nav>
+    </header>
+    <div class="container">
+        <form method="POST" action="{{ url_for('editar_familia', familia_id=familia.id) }}">
+            <div class="form-group">
+                <label for="nome">Nome da Família:</label>
+                <input type="text" name="nome" id="nome" value="{{ familia.nome }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" name="endereco" id="endereco" value="{{ familia.endereco }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cidade">Cidade:</label>
+                <input type="text" name="cidade" id="cidade" value="{{ familia.cidade }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="estado">Estado:</label>
+                <input type="text" name="estado" id="estado" value="{{ familia.estado }}" maxlength="2" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input type="text" name="cep" id="cep" value="{{ familia.cep }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="text" name="telefone" id="telefone" value="{{ familia.telefone }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="referencia">Referência:</label>
+                <input type="text" name="referencia" id="referencia" value="{{ familia.referencia }}">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="internet" id="internet" {% if familia.internet %}checked{% endif %}>
+                <label for="internet">Possui Internet</label>
+            </div>
+
+            <div class="form-group">
+                <label for="qtd_celulares">Quantidade de Celulares:</label>
+                <input type="number" name="qtd_celulares" id="qtd_celulares" min="0" value="{{ familia.qtd_celulares }}">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="auxilio_governo" id="auxilio_governo" {% if familia.auxilio_governo %}checked{% endif %}>
+                <label for="auxilio_governo">Recebe Auxílio do Governo</label>
+            </div>
+
+            <div class="form-group">
+                <label for="estado_civil">Estado Civil:</label>
+                <input type="text" name="estado_civil" id="estado_civil" value="{{ familia.estado_civil }}" required>
+            </div>
+
+            <h3>Membros da Família</h3>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Parentesco</th>
+                        <th>Renda</th>
+                        <th>Ações</th>
+                    </tr>
+                    {% for membro in familia.membros %}
+                    <tr>
+                        <td>{{ membro.nome }}</td>
+                        <td>{{ membro.parentesco }}</td>
+                        <td>R$ {{ '%.2f' % membro.renda }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ url_for('editar_membro', membro_id=membro.id) }}" class="edit-button">Editar</a>
+                                <form action="{{ url_for('excluir_membro', membro_id=membro.id) }}" method="POST">
+                                    <button type="submit" class="delete" onclick="return confirm('Tem certeza que deseja excluir este membro?')">Excluir</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <h3>Adicionar Novo Membro</h3>
+            <div id="novo_membro">
+                <div class="form-group">
+                    <label for="nome_novo_membro">Nome:</label>
+                    <input type="text" name="nome_novo_membro" placeholder="Nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="parentesco_novo_membro">Parentesco:</label>
+                    <select name="parentesco_novo_membro" required>
+                        <option value="Pai">Pai</option>
+                        <option value="Mãe">Mãe</option>
+                        <option value="Filho">Filho</option>
+                        <option value="Filha">Filha</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="renda_novo_membro">Renda:</label>
+                    <input type="number" step="0.01" name="renda_novo_membro" placeholder="Renda" required>
+                </div>
+            </div>
+            <button type="button" onclick="adicionarNovoMembro()">Adicionar Membro</button>
+            <div class="button-group">
+                <button type="submit">Atualizar Família</button>
+                <button type="reset" class="reset">Limpar</button>
+            </div>
+        </form>
+
+        <script>
+            function adicionarNovoMembro() {
+                const novoMembroDiv = document.createElement('div');
+                novoMembroDiv.classList.add('form-group');
+
+                novoMembroDiv.innerHTML = `
+                    <div class="form-group">
+                        <label for="nome_novo_membro">Nome:</label>
+                        <input type="text" name="nome_novo_membro" placeholder="Nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="parentesco_novo_membro">Parentesco:</label>
+                        <select name="parentesco_novo_membro" required>
+                            <option value="Pai">Pai</option>
+                            <option value="Mãe">Mãe</option>
+                            <option value="Filho">Filho</option>
+                            <option value="Filha">Filha</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="renda_novo_membro">Renda:</label>
+                        <input type="number" step="0.01" name="renda_novo_membro" placeholder="Renda" required>
+                    </div>
+                `;
+
+                document.getElementById('novo_membro').appendChild(novoMembroDiv);
+            }
+        </script>
+    </div>
+</body>
+</html>
