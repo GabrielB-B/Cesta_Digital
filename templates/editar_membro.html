@@ -38,6 +38,35 @@
                 <input type="number" step="0.01" name="renda" id="renda" value="{{ membro.renda }}" required>
             </div>
 
+            <div class="form-group">
+                <label for="estado_civil">Estado Civil:</label>
+                <input type="text" name="estado_civil" id="estado_civil" value="{{ membro.estado_civil }}">
+            </div>
+
+            <div class="form-group">
+                <label for="idade">Idade:</label>
+                <input type="number" name="idade" id="idade" min="0" value="{{ membro.idade }}">
+            </div>
+
+            <div class="form-group">
+                <label for="sexo">Sexo:</label>
+                <select name="sexo" id="sexo">
+                    <option value="Masculino" {% if membro.sexo == 'Masculino' %}selected{% endif %}>Masculino</option>
+                    <option value="Feminino" {% if membro.sexo == 'Feminino' %}selected{% endif %}>Feminino</option>
+                    <option value="Outro" {% if membro.sexo == 'Outro' %}selected{% endif %}>Outro</option>
+                </select>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="carteira_assinada" id="carteira_assinada" {% if membro.carteira_assinada %}checked{% endif %}>
+                <label for="carteira_assinada">Carteira Assinada</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" name="deficiencia_fisica" id="deficiencia_fisica" {% if membro.deficiencia_fisica %}checked{% endif %}>
+                <label for="deficiencia_fisica">Possui Deficiência Física</label>
+            </div>
+
             <div class="button-group">
                 <button type="submit">Atualizar Membro</button>
                 <button type="reset" class="reset">Limpar</button>

@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <label for="estado">Estado:</label>
-                <input type="text" name="estado" id="estado" value="{{ familia.estado }}" maxlength="2" required>
+                <input type="text" name="estado" id="estado" maxlength="2" value="{{ familia.estado }}" required>
             </div>
 
             <div class="form-group">
@@ -67,11 +67,6 @@
                 <label for="auxilio_governo">Recebe Auxílio do Governo</label>
             </div>
 
-            <div class="form-group">
-                <label for="estado_civil">Estado Civil:</label>
-                <input type="text" name="estado_civil" id="estado_civil" value="{{ familia.estado_civil }}" required>
-            </div>
-
             <h3>Membros da Família</h3>
             <div class="table-container">
                 <table>
@@ -79,6 +74,11 @@
                         <th>Nome</th>
                         <th>Parentesco</th>
                         <th>Renda</th>
+                        <th>Estado Civil</th>
+                        <th>Idade</th>
+                        <th>Sexo</th>
+                        <th>Carteira Assinada</th>
+                        <th>Deficiência Física</th>
                         <th>Ações</th>
                     </tr>
                     {% for membro in familia.membros %}
@@ -86,6 +86,11 @@
                         <td>{{ membro.nome }}</td>
                         <td>{{ membro.parentesco }}</td>
                         <td>R$ {{ '%.2f' % membro.renda }}</td>
+                        <td>{{ membro.estado_civil }}</td>
+                        <td>{{ membro.idade }}</td>
+                        <td>{{ membro.sexo }}</td>
+                        <td>{{ 'Sim' if membro.carteira_assinada else 'Não' }}</td>
+                        <td>{{ 'Sim' if membro.deficiencia_fisica else 'Não' }}</td>
                         <td>
                             <div class="action-buttons">
                                 <a href="{{ url_for('editar_membro', membro_id=membro.id) }}" class="edit-button">Editar</a>
@@ -119,6 +124,30 @@
                     <label for="renda_novo_membro">Renda:</label>
                     <input type="number" step="0.01" name="renda_novo_membro" placeholder="Renda" required>
                 </div>
+                <div class="form-group">
+                    <label for="estado_civil_novo_membro">Estado Civil:</label>
+                    <input type="text" name="estado_civil_novo_membro" placeholder="Estado Civil" required>
+                </div>
+                <div class="form-group">
+                    <label for="idade_novo_membro">Idade:</label>
+                    <input type="number" name="idade_novo_membro" min="0" placeholder="Idade">
+                </div>
+                <div class="form-group">
+                    <label for="sexo_novo_membro">Sexo:</label>
+                    <select name="sexo_novo_membro">
+                        <option value="Masculino">Masculino</option>
+                        <option value="Feminino">Feminino</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" name="carteira_assinada_novo_membro">
+                    <label>Carteira Assinada</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" name="deficiencia_fisica_novo_membro">
+                    <label>Possui Deficiência Física</label>
+                </div>
             </div>
             <button type="button" onclick="adicionarNovoMembro()">Adicionar Membro</button>
             <div class="button-group">
@@ -128,11 +157,13 @@
         </form>
 
         <script>
-            function adicionarNovoMembro() {
-                const novoMembroDiv = document.createElement('div');
-                novoMembroDiv.classList.add('form-group');
+            function addMembro() {
+                const membrosDiv = document.getElementById('novo_membro');
 
-                novoMembroDiv.innerHTML = `
+                const novoMembro = document.createElement('div');
+                novoMembro.classList.add('form-group');
+
+                novoMembro.innerHTML = `
                     <div class="form-group">
                         <label for="nome_novo_membro">Nome:</label>
                         <input type="text" name="nome_novo_membro" placeholder="Nome" required>
@@ -151,9 +182,33 @@
                         <label for="renda_novo_membro">Renda:</label>
                         <input type="number" step="0.01" name="renda_novo_membro" placeholder="Renda" required>
                     </div>
+                    <div class="form-group">
+                        <label for="estado_civil_novo_membro">Estado Civil:</label>
+                        <input type="text" name="estado_civil_novo_membro" placeholder="Estado Civil" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="idade_novo_membro">Idade:</label>
+                        <input type="number" name="idade_novo_membro" min="0" placeholder="Idade">
+                    </div>
+                    <div class="form-group">
+                        <label for="sexo_novo_membro">Sexo:</label>
+                        <select name="sexo_novo_membro">
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="carteira_assinada_novo_membro">
+                        <label>Carteira Assinada</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="deficiencia_fisica_novo_membro">
+                        <label>Possui Deficiência Física</label>
+                    </div>
                 `;
 
-                document.getElementById('novo_membro').appendChild(novoMembroDiv);
+                membrosDiv.appendChild(novoMembro);
             }
         </script>
     </div>

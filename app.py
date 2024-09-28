@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,6 +9,9 @@ app.config.from_object(Config)
 
 db.init_app(app)
 migrate = Migrate(app, db)
+
+# Define o valor da linha de pobreza
+SALARIO_MINIMO = 1412.00  # Valor atual do salário mínimo
 
 # Rotas para o login e cadastro
 @app.route('/login', methods=['GET', 'POST'])
@@ -66,9 +68,8 @@ def adicionar_familia():
         telefone = request.form['telefone']
         referencia = request.form['referencia']
         internet = bool(request.form.get('internet'))
+        qtd_celulares = int(request.form['qtd_celulares'])
         auxilio_governo = bool(request.form.get('auxilio_governo'))
-        estado_civil = request.form['estado_civil']
-        # renda_familiar será recalculada com base na renda dos membros
 
         # Criação da nova família
         nova_familia = Familia(
@@ -80,9 +81,9 @@ def adicionar_familia():
             telefone=telefone,
             referencia=referencia,
             internet=internet,
+            qtd_celulares=qtd_celulares,
             auxilio_governo=auxilio_governo,
-            estado_civil=estado_civil,
-            renda_familiar=0.0
+            renda_familiar=0.0  # Será recalculada
         )
         db.session.add(nova_familia)
         db.session.commit()
@@ -91,13 +92,24 @@ def adicionar_familia():
         nomes = request.form.getlist('nome_membro')
         parentescos = request.form.getlist('parentesco')
         rendas = request.form.getlist('renda')
+        estados_civis = request.form.getlist('estado_civil')
+        idades = request.form.getlist('idade')
+        sexos = request.form.getlist('sexo')
+        carteiras = request.form.getlist('carteira_assinada')
+        deficiencias = request.form.getlist('deficiencia_fisica')
 
-        for nome_membro, parentesco, renda in zip(nomes, parentescos, rendas):
-            if nome_membro and parentesco and renda:
+        # Adiciona cada membro
+        for i in range(len(nomes)):
+            if nomes[i]:  # Verifica se o nome do membro não está vazio
                 novo_membro = Membro(
-                    nome=nome_membro,
-                    parentesco=parentesco,
-                    renda=float(renda),
+                    nome=nomes[i],
+                    parentesco=parentescos[i],
+                    renda=float(rendas[i]) if i < len(rendas) and rendas[i] else 0.0,
+                    estado_civil=estados_civis[i],
+                    idade=int(idades[i]) if i < len(idades) and idades[i] else None,
+                    sexo=sexos[i],
+                    carteira_assinada=bool(carteiras[i]) if i < len(carteiras) and carteiras[i] else False,
+                    deficiencia_fisica=bool(deficiencias[i]) if i < len(deficiencias) and deficiencias[i] else False,
                     familia_id=nova_familia.id
                 )
                 db.session.add(novo_membro)
@@ -147,56 +159,17 @@ def editar_familia(familia_id):
         familia.telefone = request.form['telefone']
         familia.referencia = request.form['referencia']
         familia.internet = bool(request.form.get('internet'))
+        familia.qtd_celulares = int(request.form['qtd_celulares'])
         familia.auxilio_governo = bool(request.form.get('auxilio_governo'))
-        familia.estado_civil = request.form['estado_civil']
 
-        # Atualizar a renda_familiar com base na soma das rendas dos membros
+        # Atualiza a renda familiar
         familia.renda_familiar = sum(membro.renda for membro in familia.membros)
-
         db.session.commit()
-        flash('Família atualizada com sucesso!')
+
+        flash('Família editada com sucesso!')
         return redirect(url_for('index'))
+    
     return render_template('editar_familia.html', familia=familia)
-
-# Rota para excluir membro
-@app.route('/excluir_membro/<int:membro_id>', methods=['POST'])
-def excluir_membro(membro_id):
-    if 'usuario_id' not in session:
-        return redirect(url_for('login'))
-    membro = Membro.query.get_or_404(membro_id)
-    familia_id = membro.familia_id
-    db.session.delete(membro)
-    db.session.commit()
-
-    # Atualizar a renda_familiar com base na soma das rendas dos membros
-    familia = Familia.query.get(familia_id)
-    familia.renda_familiar = sum(m.renda for m in familia.membros)
-    db.session.commit()
-
-    flash('Membro excluído com sucesso!')
-    return redirect(url_for('editar_familia', familia_id=familia_id))
-
-# Rota para editar membro
-@app.route('/editar_membro/<int:membro_id>', methods=['GET', 'POST'])
-def editar_membro(membro_id):
-    if 'usuario_id' not in session:
-        return redirect(url_for('login'))
-    membro = Membro.query.get_or_404(membro_id)
-    if request.method == 'POST':
-        membro.nome = request.form['nome_membro']
-        membro.parentesco = request.form['parentesco']
-        membro.renda = float(request.form['renda'])
-
-        db.session.commit()
-
-        # Atualizar a renda_familiar com base na soma das rendas dos membros
-        familia = membro.familia
-        familia.renda_familiar = sum(m.renda for m in familia.membros)
-        db.session.commit()
-
-        flash('Membro atualizado com sucesso!')
-        return redirect(url_for('editar_familia', familia_id=membro.familia_id))
-    return render_template('editar_membro.html', membro=membro)
 
 if __name__ == '__main__':
     app.run(debug=True)

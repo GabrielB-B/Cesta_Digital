@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 db = SQLAlchemy()
 
 class Usuario(db.Model):
+    __tablename__ = 'usuario'
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100), nullable=False, unique=True)
     senha_hash = db.Column(db.String(200), nullable=False)
@@ -16,6 +17,7 @@ class Usuario(db.Model):
         return check_password_hash(self.senha_hash, senha)
 
 class Familia(db.Model):
+    __tablename__ = 'familia'
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(150), nullable=False)
     endereco = db.Column(db.String(255), nullable=False)
@@ -27,7 +29,6 @@ class Familia(db.Model):
     internet = db.Column(db.Boolean, default=False)
     qtd_celulares = db.Column(db.Integer, default=0)
     auxilio_governo = db.Column(db.Boolean, default=False)
-    estado_civil = db.Column(db.String(20), nullable=False)
     renda_familiar = db.Column(db.Float, nullable=False)
 
     # Relacionamento com os membros da família
@@ -40,7 +41,7 @@ class Familia(db.Model):
         num_membros = len(self.membros)
         if num_membros > 0:
             renda_per_capita = renda_total / num_membros
-            return renda_per_capita < (salario_minimo / 2)
+            return renda_per_capita < (salario_minimo / 2)  # Considera pobre se a renda per capita for menor que metade do salário mínimo
         return False
 
 class Membro(db.Model):
@@ -49,4 +50,9 @@ class Membro(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     parentesco = db.Column(db.String(50), nullable=False)  # pai, mãe, filho, etc.
     renda = db.Column(db.Float, nullable=False)
+    estado_civil = db.Column(db.String(20), nullable=True)
+    idade = db.Column(db.Integer, nullable=True)
+    sexo = db.Column(db.String(10), nullable=True)
+    carteira_assinada = db.Column(db.Boolean, default=False)
+    deficiencia_fisica = db.Column(db.Boolean, default=False)
     familia_id = db.Column(db.Integer, db.ForeignKey('familia.id'), nullable=False)

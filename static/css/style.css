@@ -171,6 +171,31 @@ th {
     gap: 10px;
 }
 
+.action-buttons a,
+.action-buttons button {
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.action-buttons a:hover,
+.action-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.action-buttons button.delete {
+    background-color: #dc3545;
+}
+
+.action-buttons button.delete:hover {
+    background-color: #c82333;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     .button-group {
@@ -184,5 +209,10 @@ th {
 
     .action-buttons {
         flex-direction: column;
+    }
+
+    .action-buttons a,
+    .action-buttons button {
+        width: 100%;
     }
 }
