@@ -31,16 +31,17 @@ h1, h2, h3 {
 }
 
 header {
-    background: #333;
+    background: white;
     color: #fff;
     padding: 15px 0;
     text-align: center;
     border-radius: 8px;
-    margin-bottom: 30px;
+    margin-bottom: 30px; 
+    
 }
 
 nav a {
-    color: #fff;
+    color: black;
     margin: 0 15px;
     text-decoration: none;
     font-weight: bold;
@@ -216,3 +217,4 @@ th {
         width: 100%;
     }
 }
+

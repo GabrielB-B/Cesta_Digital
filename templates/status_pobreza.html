@@ -1,0 +1,17 @@
+<!-- templates/status_pobreza.html -->
+{% extends 'base.html' %}
+
+{% block title %}Status de Pobreza - Cesta Digital{% endblock %}
+
+{% block content %}
+    <h2>Status de Pobreza da Família: {{ familia.nome }}</h2>
+    <p><strong>Renda Familiar:</strong> R$ {{ '%.2f' % familia.renda_familiar }}</p>
+    <p><strong>Situação de Pobreza:</strong>
+        {% if is_pobre %}
+            <span class="status-pobreza">Pobreza</span>
+        {% else %}
+            <span class="status-nao-pobreza">Acima da Linha de Pobreza</span>
+        {% endif %}
+    </p>
+    <a href="{{ url_for('index') }}">Voltar para a lista de famílias</a>
+{% endblock %}
